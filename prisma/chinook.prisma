@@ -21,9 +21,11 @@ model Album {
 model Artist {
   id       Int     @id @default(autoincrement())
   name     String
+
   album    Album[]
 
   @@map("artists")
+  @@index([name])
 }
 
 model Customer {
@@ -40,6 +42,8 @@ model Customer {
   fax          String?
   email        String
   support_rep_id Int?
+
+  invoice Invoice[]
 
   @@map("customers")
 }
@@ -73,7 +77,8 @@ model Genre {
 }
 
 model Invoice {
-  id                  Int     @id @default(autoincrement())
+  id                  Int        @id @default(autoincrement())
+  customer            Customer?  @relation(fields: [customer_id], references: [id])
   customer_id         Int?
   invoice_date        DateTime
   billing_address     String?
@@ -83,11 +88,13 @@ model Invoice {
   billing_postal_code String?
   total               Float
 
+  invoiceItem InvoiceItem[]
   @@map("invoices")
 }
 
 model InvoiceItem {
   id            Int     @id @default(autoincrement())
+  invoice       Invoice?  @relation(fields: [invoice_id], references: [id])
   invoice_id    Int?
   track_id      Int?
   unit_price    Float
@@ -107,12 +114,16 @@ model Playlist {
   id  Int     @id @default(autoincrement())
   name        String
 
+  playlistTrack PlaylistTrack[]
+
   @@map("playlists")
 }
 
 model PlaylistTrack {
   id  Int      @id @default(autoincrement())
+  playlist     Playlist?  @relation(fields: [playlist_id], references: [id])
   playlist_id  Int
+  track        Track?  @relation(fields: [track_id], references: [id])
   track_id     Int
 
   @@map("playlist_track")
@@ -128,6 +139,8 @@ model Track {
   milliseconds  Int
   bytes         Int?
   unit_price    Float
+
+  playlistTrack PlaylistTrack[]
 
   @@map("tracks")
 }
