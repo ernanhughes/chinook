@@ -15,5 +15,5 @@ async def read_tracks():
 @router.get("/tracks/{track_id}", tags=["tracks"])
 async def read_track(track_id: int):
     print(f'Getting track_id: {track_id}')
-    track = await prisma.track.find_unique(where={"TrackId": track_id})
+    track = await prisma.track.find_unique(where={"id": track_id})
     return track

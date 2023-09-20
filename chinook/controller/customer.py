@@ -15,5 +15,5 @@ async def read_customers():
 @router.get("/customers/{customer_id}", tags=["customers"])
 async def read_customer(customer_id: int):
     print(f'Getting customer_id: {customer_id}')
-    customer = await prisma.customer.find_unique(where={"CustomerId": customer_id})
+    customer = await prisma.customer.find_unique(where={"id": customer_id})
     return customer

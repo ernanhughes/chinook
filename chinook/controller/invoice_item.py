@@ -15,5 +15,5 @@ async def read_invoice_items():
 @router.get("/invoiceitems/{invoiceitem_id}", tags=["invoiceitems"])
 async def read_invoice_item(invoice_item_id: int):
     print(f'Getting invoice_item_id: {invoice_item_id}')
-    invoice_item = await prisma.invoiceitem.find_unique(where={"InvoiceLineId": invoice_item_id})
+    invoice_item = await prisma.invoiceitem.find_unique(where={"id": invoice_item_id})
     return invoice_item

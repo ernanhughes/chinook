@@ -15,5 +15,5 @@ async def read_playlist_tracks():
 @router.get("/playlisttracks/{playlisttrack_id}", tags=["playlisttracks"])
 async def read_playlist(playlist_id: int):
     print(f'Getting playlisttrack_id: {playlist_id}')
-    playlist_track = await prisma.playlisttrack.find_unique(where={"PlaylistId": playlist_id})
+    playlist_track = await prisma.playlisttrack.find_unique(where={"id": playlist_id})
     return playlist_track

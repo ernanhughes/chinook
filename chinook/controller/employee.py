@@ -15,5 +15,5 @@ async def read_employees():
 @router.get("/employees/{employee_id}", tags=["employees"])
 async def read_employee(employee_id: int):
     print(f'Getting employee_id: {employee_id}')
-    employee = await prisma.employee.find_unique(where={"employeeId": employee_id})
+    employee = await prisma.employee.find_unique(where={"id": employee_id})
     return employee

@@ -15,5 +15,5 @@ async def read_genres():
 @router.get("/genres/{genre_id}", tags=["genres"])
 async def read_genre(genre_id: int):
     print(f'Getting genre_id: {genre_id}')
-    genre = await prisma.genre.find_unique(where={"GenreId": genre_id})
+    genre = await prisma.genre.find_unique(where={"id": genre_id})
     return genre

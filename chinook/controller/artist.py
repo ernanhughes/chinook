@@ -15,5 +15,5 @@ async def read_artists():
 @router.get("/artists/{artist_id}", tags=["artists"])
 async def read_artist(artist_id: int):
     print(f'Getting artist_id: {artist_id}')
-    artist = await prisma.artist.find_unique(where={"ArtistId": artist_id})
+    artist = await prisma.artist.find_unique(where={"id": artist_id})
     return artist

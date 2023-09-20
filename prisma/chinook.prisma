@@ -9,124 +9,125 @@ generator client {
 }
 
 model Album {
-  AlbumId  Int     @id @default(autoincrement())
-  Title    String
-  Artist   Artist? @relation(fields: [ArtistId], references: [ArtistId])
-  ArtistId Int?
+  id        Int     @id @default(autoincrement())
+  title     String
+  artist    Artist? @relation(fields: [artist_id], references: [id])
+  artist_id Int?
 
   @@map("albums")
+  @@index([title])
 }
 
 model Artist {
-  ArtistId Int     @id @default(autoincrement())
-  Name     String
-  Album    Album[]
+  id       Int     @id @default(autoincrement())
+  name     String
+  album    Album[]
 
   @@map("artists")
 }
 
 model Customer {
-  CustomerId   Int     @id @default(autoincrement())
-  FirstName    String
-  LastName     String
-  Company      String?
-  Address      String?
-  City         String?
-  State        String?
-  Country      String?
-  PostalCode   String?
-  Phone        String?
-  Fax          String?
-  Email        String
-  SupportRepId Int?
+  id           Int     @id @default(autoincrement())
+  first_name   String
+  last_name    String
+  company      String?
+  address      String?
+  city         String?
+  state        String?
+  country      String?
+  postal_code  String?
+  phone        String?
+  fax          String?
+  email        String
+  support_rep_id Int?
 
   @@map("customers")
 }
 
 model Employee {
-  EmployeeId  Int       @id @default(autoincrement())
-  LastName    String
-  FirstName   String
-  Title       String?
-  ReportsToId Int?
-  BirthDate   DateTime?
-  HireDate    DateTime?
-  Address     String?
-  City        String?
-  State       String?
-  Country     String?
-  PostalCode  String?
-  Phone       String?
-  Fax         String?
-  Email       String?
+  id  Int        @id @default(autoincrement())
+  last_name      String
+  first_name     String
+  title          String?
+  reports_to_id  Int?
+  birth_date     DateTime?
+  hire_date      DateTime?
+  address        String?
+  city           String?
+  state          String?
+  country        String?
+  postal_code    String?
+  phone          String?
+  fax            String?
+  email          String?
 
   @@map("employees")
 }
 
 model Genre {
-  GenreId Int    @id @default(autoincrement())
-  Name    String
+  id      Int     @id @default(autoincrement())
+  name    String
 
   @@map("genres")
-  @@index([Name])
+  @@index([name])
 }
 
 model Invoice {
-  InvoiceId         Int      @id @default(autoincrement())
-  CustomerId        Int?
-  InvoiceDate       DateTime
-  BillingAddress    String?
-  BillingCity       String?
-  BillingState      String?
-  BillingCountry    String?
-  BillingPostalCode String?
-  Total             Float
+  id                  Int     @id @default(autoincrement())
+  customer_id         Int?
+  invoice_date        DateTime
+  billing_address     String?
+  billing_city        String?
+  billing_state       String?
+  billing_country     String?
+  billing_postal_code String?
+  total               Float
 
   @@map("invoices")
 }
 
 model InvoiceItem {
-  InvoiceLineId Int   @id @default(autoincrement())
-  InvoiceId     Int?
-  TrackId       Int?
-  UnitPrice     Float
-  Quantity      Int
+  id            Int     @id @default(autoincrement())
+  invoice_id    Int?
+  track_id      Int?
+  unit_price    Float
+  quantity      Int
 
   @@map("invoice_items")
 }
 
 model MediaType {
-  MediaTypeId Int    @id @default(autoincrement())
-  Name        String
+  id  Int     @id @default(autoincrement())
+  name        String
 
   @@map("media_types")
 }
 
 model Playlist {
-  PlaylistId Int    @id @default(autoincrement())
-  Name       String
+  id  Int     @id @default(autoincrement())
+  name        String
 
   @@map("playlists")
 }
 
 model PlaylistTrack {
-  PlaylistId Int
-  TrackId    Int
+  id  Int      @id @default(autoincrement())
+  playlist_id  Int
+  track_id     Int
 
-  @@id([PlaylistId, TrackId])
   @@map("playlist_track")
 }
 
 model Track {
-  TrackId      Int     @id @default(autoincrement())
-  Name         String
-  AlbumId      Int?
-  MediaTypeId  Int?
-  GenreId      Int?
-  Composer     String?
-  Milliseconds Int
-  Bytes        Int?
-  UnitPrice    Float
+  id            Int      @id @default(autoincrement())
+  name          String
+  album_id      Int?
+  media_type_id Int?
+  genre_id      Int?
+  composer      String?
+  milliseconds  Int
+  bytes         Int?
+  unit_price    Float
 
   @@map("tracks")
 }

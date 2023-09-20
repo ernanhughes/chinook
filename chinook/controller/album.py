@@ -22,14 +22,14 @@ async def read_albums():
 @router.get("/albums/{album_id}", tags=["albums"])
 async def read_album(album_id: int):
     print(f'Getting album_id: {album_id}')
-    album = await prisma.album.find_unique(where={"AlbumId": album_id})
+    album = await prisma.album.find_unique(where={"id": album_id})
     return album
 
 
 @router.put("/albums/{album_id}", tags=["albums"])
 async def update(album_id: int, album: AlbumPostAndPut):
-    return await prisma.album.update(data={"Title": album.Title, "ArtistId": album.ArtistId},
-                                     where={"AlbumId": album_id})
+    return await prisma.album.update(data={"title": album.Title, "artist_id": album.ArtistId},
+                                     where={"id": album_id})
 
 
 @router.post("/albums/", tags=["albums"])
@@ -48,4 +48,4 @@ async def post(album: AlbumPostAndPut):
 
 @router.delete("/albums/{album_id}", tags=["albums"])
 async def delete(album_id: int):
-    return await prisma.album.delete(where={"AlbumId": album_id})
+    return await prisma.album.delete(where={"id": album_id})
