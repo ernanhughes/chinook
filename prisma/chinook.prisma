@@ -1,0 +1,132 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider             = "prisma-client-py"
+  recursive_type_depth = 5
+}
+
+model Album {
+  AlbumId  Int     @id @default(autoincrement())
+  Title    String
+  Artist   Artist? @relation(fields: [ArtistId], references: [ArtistId])
+  ArtistId Int?
+
+  @@map("albums")
+}
+
+model Artist {
+  ArtistId Int     @id @default(autoincrement())
+  Name     String
+  Album    Album[]
+
+  @@map("artists")
+}
+
+model Customer {
+  CustomerId   Int     @id @default(autoincrement())
+  FirstName    String
+  LastName     String
+  Company      String?
+  Address      String?
+  City         String?
+  State        String?
+  Country      String?
+  PostalCode   String?
+  Phone        String?
+  Fax          String?
+  Email        String
+  SupportRepId Int?
+
+  @@map("customers")
+}
+
+model Employee {
+  EmployeeId  Int       @id @default(autoincrement())
+  LastName    String
+  FirstName   String
+  Title       String?
+  ReportsToId Int?
+  BirthDate   DateTime?
+  HireDate    DateTime?
+  Address     String?
+  City        String?
+  State       String?
+  Country     String?
+  PostalCode  String?
+  Phone       String?
+  Fax         String?
+  Email       String?
+
+  @@map("employees")
+}
+
+model Genre {
+  GenreId Int    @id @default(autoincrement())
+  Name    String
+
+  @@map("genres")
+  @@index([Name])
+}
+
+model Invoice {
+  InvoiceId         Int      @id @default(autoincrement())
+  CustomerId        Int?
+  InvoiceDate       DateTime
+  BillingAddress    String?
+  BillingCity       String?
+  BillingState      String?
+  BillingCountry    String?
+  BillingPostalCode String?
+  Total             Float
+
+  @@map("invoices")
+}
+
+model InvoiceItem {
+  InvoiceLineId Int   @id @default(autoincrement())
+  InvoiceId     Int?
+  TrackId       Int?
+  UnitPrice     Float
+  Quantity      Int
+
+  @@map("invoice_items")
+}
+
+model MediaType {
+  MediaTypeId Int    @id @default(autoincrement())
+  Name        String
+
+  @@map("media_types")
+}
+
+model Playlist {
+  PlaylistId Int    @id @default(autoincrement())
+  Name       String
+
+  @@map("playlists")
+}
+
+model PlaylistTrack {
+  PlaylistId Int
+  TrackId    Int
+
+  @@id([PlaylistId, TrackId])
+  @@map("playlist_track")
+}
+
+model Track {
+  TrackId      Int     @id @default(autoincrement())
+  Name         String
+  AlbumId      Int?
+  MediaTypeId  Int?
+  GenreId      Int?
+  Composer     String?
+  Milliseconds Int
+  Bytes        Int?
+  UnitPrice    Float
+
+  @@map("tracks")
+}

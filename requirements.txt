@@ -1,0 +1,8 @@
+langchain
+openai
+python_dotenv
+fastapi~=0.103.1
+pydantic~=2.3.0
+uvicorn~=0.23.2
+python-dotenv~=1.0.0
+prisma~=0.10.0
