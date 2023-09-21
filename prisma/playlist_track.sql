@@ -8714,3 +8714,5 @@ INSERT INTO playlist_track (playlist_id, track_id) VALUES (17,2095);
 INSERT INTO playlist_track (playlist_id, track_id) VALUES (17,2096);
 INSERT INTO playlist_track (playlist_id, track_id) VALUES (17,3290);
 INSERT INTO playlist_track (playlist_id, track_id) VALUES (18,597);
+--- update sequence on table playlist_track
+SELECT setval(pg_get_serial_sequence('playlist_track', 'id'), coalesce(max(id)+1, 1), false) FROM playlist_track;

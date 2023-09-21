@@ -17,3 +17,5 @@ INSERT INTO playlists (id, name) VALUES (15,'Classical 101 - The Basics');
 INSERT INTO playlists (id, name) VALUES (16,'Grunge');
 INSERT INTO playlists (id, name) VALUES (17,'Heavy Metal Classic');
 INSERT INTO playlists (id, name) VALUES (18,'On-The-Go 1');
+--- update sequence on table playlists
+SELECT setval(pg_get_serial_sequence('playlists', 'id'), coalesce(max(id)+1, 1), false) FROM playlists;

@@ -24,3 +24,5 @@ INSERT INTO genres (id, name) VALUES (22,'Comedy');
 INSERT INTO genres (id, name) VALUES (23,'Alternative');
 INSERT INTO genres (id, name) VALUES (24,'Classical');
 INSERT INTO genres (id, name) VALUES (25,'Opera');
+--- update sequence on table genres
+SELECT setval(pg_get_serial_sequence('genres', 'id'), coalesce(max(id)+1, 1), false) FROM genres;

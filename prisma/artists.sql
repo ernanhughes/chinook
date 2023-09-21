@@ -274,3 +274,5 @@ INSERT INTO artists (id, name) VALUES (272,'Emerson String Quartet');
 INSERT INTO artists (id, name) VALUES (273,'C. Monteverdi, Nigel Rogers - Chiaroscuro; London Baroque; London Cornett & Sackbu');
 INSERT INTO artists (id, name) VALUES (274,'Nash Ensemble');
 INSERT INTO artists (id, name) VALUES (275,'Philip Glass Ensemble');
+--- update sequence on table artists
+SELECT setval(pg_get_serial_sequence('artists', 'id'), coalesce(max(id)+1, 1), false) FROM artists;

@@ -346,3 +346,5 @@ INSERT INTO albums (id,title,artist_id) VALUES (344,'Schubert: The Late String Q
 INSERT INTO albums (id,title,artist_id) VALUES (345,'Monteverdi: L''Orfeo',273);
 INSERT INTO albums (id,title,artist_id) VALUES (346,'Mozart: Chamber Music',274);
 INSERT INTO albums (id,title,artist_id) VALUES (347,'Koyaanisqatsi (Soundtrack from the Motion Picture)',275);
+--- update sequence on table albums
+SELECT setval(pg_get_serial_sequence('albums', 'id'), coalesce(max(id)+1, 1), false) FROM albums;

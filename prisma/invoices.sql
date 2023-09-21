@@ -411,3 +411,5 @@ INSERT INTO invoices (id, customer_id, invoice_date, billing_address, billing_ci
 INSERT INTO invoices (id, customer_id, invoice_date, billing_address, billing_city, billing_state, billing_country, billing_postal_code, total) VALUES (410,35,'2013-12-09 00:00:00','Rua dos Campeões Europeus de Viena, 4350','Porto',NULL,'Portugal',NULL,8.91);
 INSERT INTO invoices (id, customer_id, invoice_date, billing_address, billing_city, billing_state, billing_country, billing_postal_code, total) VALUES (411,44,'2013-12-14 00:00:00','Porthaninkatu 9','Helsinki',NULL,'Finland','00530',13.86);
 INSERT INTO invoices (id, customer_id, invoice_date, billing_address, billing_city, billing_state, billing_country, billing_postal_code, total) VALUES (412,58,'2013-12-22 00:00:00','12,Community Centre','Delhi',NULL,'India','110017',1.99);
+--- update sequence on table invoices
+SELECT setval(pg_get_serial_sequence('invoices', 'id'), coalesce(max(id)+1, 1), false) FROM invoices;

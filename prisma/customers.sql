@@ -58,3 +58,5 @@ INSERT INTO customers (id, first_name, last_name, company, address, city, state,
 INSERT INTO customers (id, first_name, last_name, company, address, city, state, country, postal_code, phone, fax, email, support_rep_id) VALUES (57,'Luis','Rojas',NULL,'Calle Lira, 198','Santiago',NULL,'Chile',NULL,'+56 (0)2 635 4444',NULL,'luisrojas@yahoo.cl',5);
 INSERT INTO customers (id, first_name, last_name, company, address, city, state, country, postal_code, phone, fax, email, support_rep_id) VALUES (58,'Manoj','Pareek',NULL,'12,Community Centre','Delhi',NULL,'India','110017','+91 0124 39883988',NULL,'manoj.pareek@rediff.com',3);
 INSERT INTO customers (id, first_name, last_name, company, address, city, state, country, postal_code, phone, fax, email, support_rep_id) VALUES (59,'Puja','Srivastava',NULL,'3,Raj Bhavan Road','Bangalore',NULL,'India','560001','+91 080 22289999',NULL,'puja_srivastava@yahoo.in',3);
+--- update sequence on table customers
+SELECT setval(pg_get_serial_sequence('customers', 'id'), coalesce(max(id)+1, 1), false) FROM customers;

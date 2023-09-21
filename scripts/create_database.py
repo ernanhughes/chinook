@@ -1,4 +1,5 @@
 import os
+
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -24,4 +25,3 @@ insert_file('playlists')
 insert_file('playlist_track')
 insert_file('invoices')
 insert_file('invoice_items')
-

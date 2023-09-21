@@ -41,7 +41,7 @@ async def update_employee(employee_id: int, employee: EmployeePostAndPut):
         employee = await prisma.employee.update(
             data={"first_name": employee.first_name,
                   "last_name": employee.last_name,
-                  "reports_to": employee.reports_to,
+                  "reports_to_id": employee.reports_to_id,
                   "birth_date": employee.birth_date,
                   "hire_date": employee.hire_date,
                   "address": employee.address,
@@ -67,7 +67,7 @@ async def create_employee(employee: EmployeePostAndPut):
         employee = await prisma.employee.create(
             data={"first_name": employee.first_name,
                   "last_name": employee.last_name,
-                  "reports_to": employee.reports_to,
+                  "reports_to_id": employee.reports_to_id,
                   "birth_date": employee.birth_date,
                   "hire_date": employee.hire_date,
                   "address": employee.address,
