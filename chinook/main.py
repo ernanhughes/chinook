@@ -39,5 +39,5 @@ def read_root():
 
 if __name__ == "__main__":
     load_dotenv()
-    port = int(os.environ.get("PORT", 8000))
+    port = int(os.environ.get("PORT", 8001))
     uvicorn.run("main:app", host="localhost", port=port, reload=True)
