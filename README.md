@@ -18,3 +18,12 @@ This is a FastAPI project that uses Prisma to connect to a Postgres database.
 9. The Jupyter notebook in notebooks/chinook_restapi.ipynb shows how to use the api.
 
 
+## Testing
+
+Run `pytest` to run the tests.
+`pytest tests --cov=chinook --cov-report=html` to run the tests and generate a coverage report.
+
+You will need these dependencies to run the tests:
+`httpx~=0.25.0
+starlette~=0.27.0
+pytest~=7.4.2`
