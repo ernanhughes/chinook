@@ -1,4 +1,12 @@
 TRUNCATE TABLE playlists CASCADE;
+DO $$
+DECLARE
+    seq_name TEXT;
+BEGIN
+    SELECT pg_get_serial_sequence('playlists', 'id') INTO seq_name;
+    EXECUTE 'ALTER SEQUENCE ' || seq_name || ' RESTART WITH 1';
+END
+$$;
 INSERT INTO playlists (id, name) VALUES (1,'Music');
 INSERT INTO playlists (id, name) VALUES (2,'Movies');
 INSERT INTO playlists (id, name) VALUES (3,'TV Shows');

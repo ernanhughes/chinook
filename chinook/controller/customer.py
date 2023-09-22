@@ -6,7 +6,6 @@ from prisma.partials import CustomerPostAndPut
 from chinook.db.prisma import prisma
 
 logger = logging.getLogger(__name__)
-
 router = APIRouter()
 
 

@@ -6,7 +6,6 @@ from prisma.partials import InvoiceItemPostAndPut
 from chinook.db.prisma import prisma
 
 logger = logging.getLogger(__name__)
-
 router = APIRouter()
 
 
@@ -45,7 +44,7 @@ async def update_invoiceitem(invoiceitem_id: int, invoiceitem: InvoiceItemPostAn
             "quantity": invoiceitem.quantity},
             where={"id": invoiceitem_id})
     except Exception as e:
-        logger.error(f'Exception while updating invoiceitem {invoiceitem_id} with {invoiceitem}: {e}', e)
+        logger.error(f'Exception while updating invoice item {invoiceitem_id} with {invoiceitem}: {e}', e)
         raise e
     logger.debug(f'Updated invoice item {invoice_item}')
     return invoice_item

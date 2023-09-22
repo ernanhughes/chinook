@@ -1,6 +1,8 @@
 import logging
+from typing import List, Optional
 
 from fastapi import APIRouter
+from prisma.models import Artist
 from prisma.partials import ArtistPostAndPut
 
 from chinook.db.prisma import prisma
@@ -10,7 +12,7 @@ router = APIRouter()
 
 
 @router.get("/artists/", tags=["artists"])
-async def read_artists():
+async def read_artists() -> List[Artist]:
     logging.debug("Getting artists")
     try:
         artists = await prisma.artist.find_many()
@@ -22,7 +24,7 @@ async def read_artists():
 
 
 @router.get("/artists/{artist_id}", tags=["artists"])
-async def read_artist(artist_id: int):
+async def read_artist(artist_id: int) -> Artist:
     logging.debug(f'Getting artist_id: {artist_id}')
     try:
         artist = await prisma.artist.find_unique(where={"id": artist_id})
@@ -34,7 +36,7 @@ async def read_artist(artist_id: int):
 
 
 @router.put("/artists/{artist_id}", tags=["artists"])
-async def update_artist(artist_id: int, artist: ArtistPostAndPut):
+async def update_artist(artist_id: int, artist: ArtistPostAndPut) -> Artist:
     logger.debug(f'Updating artist_id: {artist_id} with {artist}')
     try:
         artist = await prisma.artist.update(data={"name": artist.name},
@@ -47,7 +49,7 @@ async def update_artist(artist_id: int, artist: ArtistPostAndPut):
 
 
 @router.post("/artists/", tags=["artists"])
-async def create_artist(artist: ArtistPostAndPut):
+async def create_artist(artist: ArtistPostAndPut) -> Artist:
     logger.debug(f'Creating artist {artist}')
     try:
         artist = await prisma.artist.create(data={"name": artist.name})
@@ -59,6 +61,6 @@ async def create_artist(artist: ArtistPostAndPut):
 
 
 @router.delete("/artists/{artist_id}", tags=["artists"])
-async def delete_artist(artist_id: int):
+async def delete_artist(artist_id: int) -> Optional[Artist]:
     logger.info(f'Deleting artist {artist_id}')
     return await prisma.artist.delete(where={"id": artist_id})

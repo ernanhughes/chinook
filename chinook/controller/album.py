@@ -1,6 +1,8 @@
 import logging
+from typing import List
 
 from fastapi import APIRouter
+from prisma.models import Album
 from prisma.partials import AlbumPostAndPut
 
 from chinook.db.prisma import prisma
@@ -10,7 +12,7 @@ router = APIRouter()
 
 
 @router.get("/albums/", tags=["albums"])
-async def read_albums():
+async def read_albums() -> List[Album]:
     logging.debug("Getting albums")
     try:
         albums = await prisma.album.find_many()
@@ -22,7 +24,7 @@ async def read_albums():
 
 
 @router.get("/albums/{album_id}", tags=["albums"])
-async def read_album(album_id: int):
+async def read_album(album_id: int) -> Album:
     logging.debug(f'Getting album_id: {album_id}')
     try:
         album = await prisma.album.find_unique(where={"id": album_id})
@@ -34,7 +36,7 @@ async def read_album(album_id: int):
 
 
 @router.put("/albums/{album_id}", tags=["albums"])
-async def update_album(album_id: int, album: AlbumPostAndPut):
+async def update_album(album_id: int, album: AlbumPostAndPut) -> Album:
     logger.debug(f'Updating album_id: {album_id} with {album}')
     try:
         album = await prisma.album.update(

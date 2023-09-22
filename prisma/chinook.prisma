@@ -14,6 +14,7 @@ model Album {
   artist    Artist? @relation(fields: [artist_id], references: [id])
   artist_id Int?
 
+  track Track[]
   @@map("albums")
   @@index([title])
 }
@@ -23,7 +24,6 @@ model Artist {
   name     String
 
   album    Album[]
-
   @@map("artists")
   @@index([name])
 }
@@ -72,6 +72,7 @@ model Genre {
   id      Int     @id @default(autoincrement())
   name    String
 
+  track Track[]
   @@map("genres")
   @@index([name])
 }
@@ -93,9 +94,10 @@ model Invoice {
 }
 
 model InvoiceItem {
-  id            Int     @id @default(autoincrement())
-  invoice       Invoice?  @relation(fields: [invoice_id], references: [id])
+  id            Int      @id @default(autoincrement())
+  invoice       Invoice? @relation(fields: [invoice_id], references: [id])
   invoice_id    Int?
+  track         Track?   @relation(fields: [track_id], references: [id])
   track_id      Int?
   unit_price    Float
   quantity      Int
@@ -107,7 +109,9 @@ model MediaType {
   id  Int     @id @default(autoincrement())
   name        String
 
+  track Track[]
   @@map("media_types")
+  @@index([name])
 }
 
 model Playlist {
@@ -115,25 +119,28 @@ model Playlist {
   name        String
 
   playlistTrack PlaylistTrack[]
-
   @@map("playlists")
+  @@index([name])
 }
 
 model PlaylistTrack {
-  id  Int      @id @default(autoincrement())
-  playlist     Playlist?  @relation(fields: [playlist_id], references: [id])
+  id  Int      @id       @default(autoincrement())
+  playlist     Playlist? @relation(fields: [playlist_id], references: [id])
   playlist_id  Int
-  track        Track?  @relation(fields: [track_id], references: [id])
+  track        Track?    @relation(fields: [track_id], references: [id])
   track_id     Int
 
   @@map("playlist_track")
 }
 
 model Track {
-  id            Int      @id @default(autoincrement())
+  id            Int        @id @default(autoincrement())
   name          String
+  album         Album?     @relation(fields: [album_id], references: [id])
   album_id      Int?
+  media_type    MediaType? @relation(fields: [media_type_id], references: [id])
   media_type_id Int?
+  genre         Genre?     @relation(fields: [genre_id], references: [id])
   genre_id      Int?
   composer      String?
   milliseconds  Int
@@ -141,6 +148,7 @@ model Track {
   unit_price    Float
 
   playlistTrack PlaylistTrack[]
-
+  invoiceItem InvoiceItem[]
   @@map("tracks")
+  @@index([name])
 }
