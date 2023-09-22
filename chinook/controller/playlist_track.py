@@ -1,6 +1,8 @@
 import logging
+from typing import Optional, List
 
 from fastapi import APIRouter
+from prisma.models import PlaylistTrack
 from prisma.partials import PlaylistTrackPostAndPut
 
 from chinook.db.prisma import prisma
@@ -10,14 +12,14 @@ router = APIRouter()
 
 
 @router.get("/playlisttracks/", tags=["playlisttracks"])
-async def read_playlist_tracks():
+async def read_playlist_tracks() -> List[PlaylistTrack]:
     playlist_tracks = await prisma.playlisttrack.find_many()
     print("playlisttracks", playlist_tracks)
     return playlist_tracks
 
 
 @router.get("/playlisttracks/{playlisttrack_id}", tags=["playlisttracks"])
-async def read_playlist_track(playlisttrack_id: int):
+async def read_playlist_track(playlisttrack_id: int) -> Optional[PlaylistTrack]:
     logging.debug(f'Getting playlist track id: {playlisttrack_id}')
     try:
         playlist_track = await prisma.playlisttrack.find_unique(where={"id": playlisttrack_id})
@@ -29,7 +31,7 @@ async def read_playlist_track(playlisttrack_id: int):
 
 
 @router.put("/playlisttracks/{playlisttrack_id}", tags=["playlisttracks"])
-async def update_playlist_track(playlisttrack_id: int, playlisttrack: PlaylistTrackPostAndPut):
+async def update_playlist_track(playlisttrack_id: int, playlisttrack: PlaylistTrackPostAndPut) -> Optional[PlaylistTrack]:
     logger.debug(f'Updating playlisttrack_id: {playlisttrack_id} with {playlisttrack}')
     try:
         playlisttrack = await prisma.playlisttrack.update(
@@ -44,7 +46,7 @@ async def update_playlist_track(playlisttrack_id: int, playlisttrack: PlaylistTr
 
 
 @router.post("/playlisttracks/", tags=["playlisttracks"])
-async def create_playlisttrack(playlisttrack: PlaylistTrackPostAndPut):
+async def create_playlisttrack(playlisttrack: PlaylistTrackPostAndPut) -> PlaylistTrack:
     logger.debug(f'Creating playlist track {playlisttrack}')
     try:
         playlist_track = await prisma.playlisttrack.create(data={"playlist_id": playlisttrack.playlist_id,
@@ -57,6 +59,6 @@ async def create_playlisttrack(playlisttrack: PlaylistTrackPostAndPut):
 
 
 @router.delete("/playlisttracks/{playlisttrack_id}", tags=["playlisttracks"])
-async def delete_playlisttrack(playlisttrack_id: int):
+async def delete_playlisttrack(playlisttrack_id: int) -> Optional[PlaylistTrack]:
     logger.info(f'Deleting playlisttrack {playlisttrack_id}')
     return await prisma.playlisttrack.delete(where={"id": playlisttrack_id})

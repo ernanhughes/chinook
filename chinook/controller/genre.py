@@ -1,6 +1,8 @@
 import logging
+from typing import Optional, List
 
 from fastapi import APIRouter
+from prisma.models import Genre
 from prisma.partials import GenrePostAndPut
 
 from chinook.db.prisma import prisma
@@ -10,7 +12,7 @@ router = APIRouter()
 
 
 @router.get("/genres/", tags=["genres"])
-async def read_genres():
+async def read_genres() -> List[Genre]:
     logging.debug("Getting genres")
     try:
         genres = await prisma.genre.find_many()
@@ -22,7 +24,7 @@ async def read_genres():
 
 
 @router.get("/genres/{genre_id}", tags=["genres"])
-async def read_genre(genre_id: int):
+async def read_genre(genre_id: int) -> Optional[Genre]:
     logging.debug(f'Getting genre_id: {genre_id}')
     try:
         genre = await prisma.genre.find_unique(where={"id": genre_id})
@@ -34,7 +36,7 @@ async def read_genre(genre_id: int):
 
 
 @router.put("/genres/{genre_id}", tags=["genres"])
-async def update_genre(genre_id: int, genre: GenrePostAndPut):
+async def update_genre(genre_id: int, genre: GenrePostAndPut) -> Optional[Genre]:
     logger.debug(f'Updating genre_id: {genre_id} with {genre}')
     try:
         genre = await prisma.genre.update(data={"name": genre.name},
@@ -47,7 +49,7 @@ async def update_genre(genre_id: int, genre: GenrePostAndPut):
 
 
 @router.post("/genres/", tags=["genres"])
-async def create_genre(genre: GenrePostAndPut):
+async def create_genre(genre: GenrePostAndPut) -> Genre:
     logger.debug(f'Creating genre {genre}')
     try:
         genre = await prisma.genre.create(data={"name": genre.name})
@@ -59,6 +61,6 @@ async def create_genre(genre: GenrePostAndPut):
 
 
 @router.delete("/genres/{genre_id}", tags=["genres"])
-async def delete_genre(genre_id: int):
+async def delete_genre(genre_id: int) -> Optional[Genre]:
     logger.info(f'Deleting genre {genre_id}')
     return await prisma.genre.delete(where={"id": genre_id})

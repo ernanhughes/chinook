@@ -1,6 +1,8 @@
 import logging
+from typing import Optional
 
 from fastapi import APIRouter
+from prisma.models import Customer
 from prisma.partials import CustomerPostAndPut
 
 from chinook.db.prisma import prisma
@@ -10,7 +12,7 @@ router = APIRouter()
 
 
 @router.get("/customers/", tags=["customers"])
-async def read_customers():
+async def read_customers() -> list[Customer]:
     logging.debug("Getting customers")
     try:
         customers = await prisma.customer.find_many()
@@ -22,7 +24,7 @@ async def read_customers():
 
 
 @router.get("/customers/{customer_id}", tags=["customers"])
-async def read_customer(customer_id: int):
+async def read_customer(customer_id: int) -> Optional[Customer]:
     logging.debug(f'Getting customer id: {customer_id}')
     try:
         customer = await prisma.customer.find_unique(where={"id": customer_id})
@@ -34,7 +36,7 @@ async def read_customer(customer_id: int):
 
 
 @router.put("/customers/{customer_id}", tags=["customers"])
-async def update_customer(customer_id: int, customer: CustomerPostAndPut):
+async def update_customer(customer_id: int, customer: CustomerPostAndPut) -> Optional[Customer]:
     logger.debug(f'Updating customer_id: {customer_id} with {customer}')
     try:
         customer = await prisma.customer.update(
@@ -59,7 +61,7 @@ async def update_customer(customer_id: int, customer: CustomerPostAndPut):
 
 
 @router.post("/customers/", tags=["customers"])
-async def create_customer(customer: CustomerPostAndPut):
+async def create_customer(customer: CustomerPostAndPut)-> Customer:
     logger.debug(f'Creating customer {customer}')
     try:
         customer = await prisma.customer.create(
@@ -83,6 +85,6 @@ async def create_customer(customer: CustomerPostAndPut):
 
 
 @router.delete("/customers/{customer_id}", tags=["customers"])
-async def delete_customer(customer_id: int):
+async def delete_customer(customer_id: int) -> Optional[Customer]:
     logger.info(f'Deleting customer {customer_id}')
     return await prisma.customer.delete(where={"id": customer_id})

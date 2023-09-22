@@ -1,6 +1,8 @@
 import logging
+from typing import Optional, List
 
 from fastapi import APIRouter
+from prisma.models import Track
 from prisma.partials import TrackPostAndPut
 
 from chinook.db.prisma import prisma
@@ -10,14 +12,14 @@ router = APIRouter()
 
 
 @router.get("/tracks/", tags=["tracks"])
-async def read_tracks():
+async def read_tracks() -> List[Track]:
     tracks = await prisma.track.find_many()
     print("tracks", tracks)
     return tracks
 
 
 @router.get("/tracks/{track_id}", tags=["tracks"])
-async def read_track(track_id: int):
+async def read_track(track_id: int) -> Optional[Track]:
     logging.debug(f'Getting track id: {track_id}')
     try:
         track = await prisma.track.find_unique(where={"id": track_id})
@@ -29,7 +31,7 @@ async def read_track(track_id: int):
 
 
 @router.put("/tracks/{track_id}", tags=["tracks"])
-async def update_track(track_id: int, track: TrackPostAndPut):
+async def update_track(track_id: int, track: TrackPostAndPut) -> Optional[Track]:
     logger.debug(f'Updating track_id: {track_id} with {track}')
     try:
         track = await prisma.track.update(
@@ -50,7 +52,7 @@ async def update_track(track_id: int, track: TrackPostAndPut):
 
 
 @router.post("/tracks/", tags=["tracks"])
-async def create_track(track: TrackPostAndPut):
+async def create_track(track: TrackPostAndPut) -> Track:
     logger.debug(f'Creating track {track}')
     try:
         track = await prisma.track.create(
@@ -70,6 +72,6 @@ async def create_track(track: TrackPostAndPut):
 
 
 @router.delete("/tracks/{track_id}", tags=["tracks"])
-async def delete_track(track_id: int):
+async def delete_track(track_id: int) -> Optional[Track]:
     logger.info(f'Deleting track {track_id}')
     return await prisma.track.delete(where={"id": track_id})

@@ -1,6 +1,8 @@
 import logging
+from typing import Optional, List
 
 from fastapi import APIRouter
+from prisma.models import Invoice
 from prisma.partials import InvoicePostAndPut
 
 from chinook.db.prisma import prisma
@@ -10,7 +12,7 @@ router = APIRouter()
 
 
 @router.get("/invoices/", tags=["invoices"])
-async def read_invoices():
+async def read_invoices() -> List[Invoice]:
     logging.debug("Getting invoices")
     try:
         invoices = await prisma.invoice.find_many()
@@ -22,7 +24,7 @@ async def read_invoices():
 
 
 @router.get("/invoices/{invoice_id}", tags=["invoices"])
-async def read_invoice(invoice_id: int):
+async def read_invoice(invoice_id: int) -> Optional[Invoice]:
     logging.debug(f'Getting invoice_id: {invoice_id}')
     try:
         invoice = await prisma.invoice.find_unique(where={"id": invoice_id})
@@ -34,7 +36,7 @@ async def read_invoice(invoice_id: int):
 
 
 @router.put("/invoices/{invoice_id}", tags=["invoices"])
-async def update_invoice(invoice_id: int, invoice: InvoicePostAndPut):
+async def update_invoice(invoice_id: int, invoice: InvoicePostAndPut) -> Optional[Invoice]:
     logger.debug(f'Updating invoice_id: {invoice_id} with {invoice}')
     try:
         invoice = await prisma.invoice.update(
@@ -55,7 +57,7 @@ async def update_invoice(invoice_id: int, invoice: InvoicePostAndPut):
 
 
 @router.post("/invoices/", tags=["invoices"])
-async def create_invoice(invoice: InvoicePostAndPut):
+async def create_invoice(invoice: InvoicePostAndPut) -> Invoice:
     logger.debug(f'Creating invoice {invoice}')
     try:
         invoice = await prisma.invoice.create(data={"customer_id": invoice.customer_id,
@@ -74,6 +76,6 @@ async def create_invoice(invoice: InvoicePostAndPut):
 
 
 @router.delete("/invoices/{invoice_id}", tags=["invoices"])
-async def delete_invoice(invoice_id: int):
+async def delete_invoice(invoice_id: int) -> Optional[Invoice]:
     logger.info(f'Deleting invoice {invoice_id}')
     return await prisma.invoice.delete(where={"id": invoice_id})

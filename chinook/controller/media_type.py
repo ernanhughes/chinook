@@ -1,6 +1,8 @@
 import logging
+from typing import Optional, List
 
 from fastapi import APIRouter
+from prisma.models import MediaType
 from prisma.partials import MediaTypePostAndPut
 
 from chinook.db.prisma import prisma
@@ -10,7 +12,7 @@ router = APIRouter()
 
 
 @router.get("/mediatypes/", tags=["mediatypes"])
-async def read_mediatypes():
+async def read_mediatypes() -> List[MediaType]:
     logging.debug("Getting media types")
     try:
         mediatypes = await prisma.mediatype.find_many()
@@ -22,7 +24,7 @@ async def read_mediatypes():
 
 
 @router.get("/mediatypes/{mediatype_id}", tags=["mediatypes"])
-async def read_mediatype(mediatype_id: int):
+async def read_mediatype(mediatype_id: int) -> Optional[MediaType]:
     logging.debug(f'Getting mediatype_id: {mediatype_id}')
     try:
         mediatype = await prisma.mediatype.find_unique(where={"id": mediatype_id})
@@ -34,7 +36,7 @@ async def read_mediatype(mediatype_id: int):
 
 
 @router.put("/mediatypes/{mediatype_id}", tags=["mediatypes"])
-async def update_mediatype(mediatype_id: int, mediatype: MediaTypePostAndPut):
+async def update_mediatype(mediatype_id: int, mediatype: MediaTypePostAndPut) -> Optional[MediaType]:
     logger.debug(f'Updating mediatype_id: {mediatype_id} with {mediatype}')
     try:
         mediatype = await prisma.mediatype.update(data={"name": mediatype.name},
@@ -47,7 +49,7 @@ async def update_mediatype(mediatype_id: int, mediatype: MediaTypePostAndPut):
 
 
 @router.post("/mediatypes/", tags=["mediatypes"])
-async def create_mediatype(mediatype: MediaTypePostAndPut):
+async def create_mediatype(mediatype: MediaTypePostAndPut) -> MediaType:
     logger.debug(f'Creating mediatype {mediatype}')
     try:
         mediatype = await prisma.mediatype.create(data={"name": mediatype.name})
@@ -59,6 +61,6 @@ async def create_mediatype(mediatype: MediaTypePostAndPut):
 
 
 @router.delete("/mediatypes/{mediatype_id}", tags=["mediatypes"])
-async def delete_mediatype(mediatype_id: int):
+async def delete_mediatype(mediatype_id: int) -> Optional[MediaType]:
     logger.info(f'Deleting mediatype {mediatype_id}')
     return await prisma.mediatype.delete(where={"id": mediatype_id})

@@ -1,6 +1,8 @@
 import logging
+from typing import Optional, List
 
 from fastapi import APIRouter
+from prisma.models import InvoiceItem
 from prisma.partials import InvoiceItemPostAndPut
 
 from chinook.db.prisma import prisma
@@ -10,7 +12,7 @@ router = APIRouter()
 
 
 @router.get("/invoiceitems/", tags=["invoiceitems"])
-async def read_invoice_items():
+async def read_invoice_items() -> List[InvoiceItem]:
     logging.debug("Getting invoice items")
     try:
         invoice_items = await prisma.invoiceitem.find_many()
@@ -22,7 +24,7 @@ async def read_invoice_items():
 
 
 @router.get("/invoiceitems/{invoiceitem_id}", tags=["invoiceitems"])
-async def read_invoiceitem(invoiceitem_id: int):
+async def read_invoiceitem(invoiceitem_id: int) -> Optional[InvoiceItem]:
     logging.debug(f'Getting invoice item id: {invoiceitem_id}')
     try:
         invoice_item = await prisma.invoiceitem.find_unique(where={"id": invoiceitem_id})
@@ -34,7 +36,7 @@ async def read_invoiceitem(invoiceitem_id: int):
 
 
 @router.put("/invoiceitems/{invoiceitem_id}", tags=["invoiceitems"])
-async def update_invoiceitem(invoiceitem_id: int, invoiceitem: InvoiceItemPostAndPut):
+async def update_invoiceitem(invoiceitem_id: int, invoiceitem: InvoiceItemPostAndPut) -> Optional[InvoiceItem]:
     logger.debug(f'Updating invoice item id: {invoiceitem_id} with {invoiceitem}')
     try:
         invoice_item = await prisma.invoiceitem.update(data={
@@ -51,7 +53,7 @@ async def update_invoiceitem(invoiceitem_id: int, invoiceitem: InvoiceItemPostAn
 
 
 @router.post("/invoiceitems/", tags=["invoiceitems"])
-async def create_invoiceitem(invoiceitem: InvoiceItemPostAndPut):
+async def create_invoiceitem(invoiceitem: InvoiceItemPostAndPut) -> InvoiceItem:
     logger.debug(f'Creating invoice item {invoiceitem}')
     try:
         invoice_item = await prisma.invoiceitem.create(data={
@@ -67,6 +69,6 @@ async def create_invoiceitem(invoiceitem: InvoiceItemPostAndPut):
 
 
 @router.delete("/invoiceitems/{invoiceitem_id}", tags=["invoiceitems"])
-async def delete_invoiceitem(invoiceitem_id: int):
+async def delete_invoiceitem(invoiceitem_id: int) -> Optional[InvoiceItem]:
     logger.info(f'Deleting invoice item {invoiceitem_id}')
     return await prisma.invoiceitem.delete(where={"id": invoiceitem_id})

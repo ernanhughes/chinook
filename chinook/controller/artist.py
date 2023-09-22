@@ -24,7 +24,7 @@ async def read_artists() -> List[Artist]:
 
 
 @router.get("/artists/{artist_id}", tags=["artists"])
-async def read_artist(artist_id: int) -> Artist:
+async def read_artist(artist_id: int) -> Optional[Artist]:
     logging.debug(f'Getting artist_id: {artist_id}')
     try:
         artist = await prisma.artist.find_unique(where={"id": artist_id})
@@ -36,7 +36,7 @@ async def read_artist(artist_id: int) -> Artist:
 
 
 @router.put("/artists/{artist_id}", tags=["artists"])
-async def update_artist(artist_id: int, artist: ArtistPostAndPut) -> Artist:
+async def update_artist(artist_id: int, artist: ArtistPostAndPut) -> Optional[Artist]:
     logger.debug(f'Updating artist_id: {artist_id} with {artist}')
     try:
         artist = await prisma.artist.update(data={"name": artist.name},

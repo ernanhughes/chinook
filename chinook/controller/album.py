@@ -1,5 +1,5 @@
 import logging
-from typing import List
+from typing import List, Optional
 
 from fastapi import APIRouter
 from prisma.models import Album
@@ -24,7 +24,7 @@ async def read_albums() -> List[Album]:
 
 
 @router.get("/albums/{album_id}", tags=["albums"])
-async def read_album(album_id: int) -> Album:
+async def read_album(album_id: int) -> Optional[Album]:
     logging.debug(f'Getting album_id: {album_id}')
     try:
         album = await prisma.album.find_unique(where={"id": album_id})
@@ -36,7 +36,7 @@ async def read_album(album_id: int) -> Album:
 
 
 @router.put("/albums/{album_id}", tags=["albums"])
-async def update_album(album_id: int, album: AlbumPostAndPut) -> Album:
+async def update_album(album_id: int, album: AlbumPostAndPut) -> Optional[Album]:
     logger.debug(f'Updating album_id: {album_id} with {album}')
     try:
         album = await prisma.album.update(
@@ -50,7 +50,7 @@ async def update_album(album_id: int, album: AlbumPostAndPut) -> Album:
 
 
 @router.post("/albums/", tags=["albums"])
-async def create_album(album: AlbumPostAndPut):
+async def create_album(album: AlbumPostAndPut) -> Album:
     logger.debug(f'Creating album {album}')
     try:
         album = await prisma.album.create(data={"title": album.title, "artist_id": album.artist_id})
@@ -62,6 +62,6 @@ async def create_album(album: AlbumPostAndPut):
 
 
 @router.delete("/albums/{album_id}", tags=["albums"])
-async def delete_album(album_id: int):
+async def delete_album(album_id: int) -> Optional[Album]:
     logger.info(f'Deleting album {album_id}')
     return await prisma.album.delete(where={"id": album_id})

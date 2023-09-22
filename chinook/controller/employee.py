@@ -1,6 +1,8 @@
 import logging
+from typing import List, Optional
 
 from fastapi import APIRouter
+from prisma.models import Employee
 from prisma.partials import EmployeePostAndPut
 
 from chinook.db.prisma import prisma
@@ -10,7 +12,7 @@ router = APIRouter()
 
 
 @router.get("/employees/", tags=["employees"])
-async def read_employees():
+async def read_employees() -> List[Employee]:
     logging.debug("Getting employees")
     try:
         employees = await prisma.employee.find_many()
@@ -22,7 +24,7 @@ async def read_employees():
 
 
 @router.get("/employees/{employee_id}", tags=["employees"])
-async def read_employee(employee_id: int):
+async def read_employee(employee_id: int) -> Optional[Employee]:
     logging.debug(f'Getting employee id: {employee_id}')
     try:
         employee = await prisma.employee.find_unique(where={"id": employee_id})
@@ -34,7 +36,7 @@ async def read_employee(employee_id: int):
 
 
 @router.put("/employees/{employee_id}", tags=["employees"])
-async def update_employee(employee_id: int, employee: EmployeePostAndPut):
+async def update_employee(employee_id: int, employee: EmployeePostAndPut) -> Optional[Employee]:
     logger.debug(f'Updating employee_id: {employee_id} with {employee}')
     try:
         employee = await prisma.employee.update(
@@ -60,7 +62,7 @@ async def update_employee(employee_id: int, employee: EmployeePostAndPut):
 
 
 @router.post("/employees/", tags=["employees"])
-async def create_employee(employee: EmployeePostAndPut):
+async def create_employee(employee: EmployeePostAndPut) -> Employee:
     logger.debug(f'Creating employee {employee}')
     try:
         employee = await prisma.employee.create(
@@ -86,6 +88,6 @@ async def create_employee(employee: EmployeePostAndPut):
 
 
 @router.delete("/employees/{employee_id}", tags=["employees"])
-async def delete_employee(employee_id: int):
+async def delete_employee(employee_id: int) -> Optional[Employee]:
     logger.info(f'Deleting employee {employee_id}')
     return await prisma.employee.delete(where={"id": employee_id})
