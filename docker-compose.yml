@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    ports:
+      - "8000:80"
+    depends_on:
+      - db
+    environment:
+      - DATABASE_URL=postgresql://chinook:chinook@db:5432/chinook
+
+  db:
+    image: postgres:14
+    environment:
+      POSTGRES_USER=chinook
+      POSTGRES_PASSWORD=chinook
+      POSTGRES_DB=chinook
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
