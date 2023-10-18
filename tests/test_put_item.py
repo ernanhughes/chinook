@@ -23,7 +23,7 @@ async def test_update_and_reset_items(client: AsyncClient) -> None:
     await check_update_key(client, playlist_tracks_endpoint, 'track_id', 3389)
 
 
-async def check_update_key(client: AsyncClient, endpoint: str, key: str, value: str) -> None:
+async def check_update_key(client: AsyncClient, endpoint: str, key: str, value: any) -> None:
     print(f'check_update_key: {endpoint} {key} {value}')
     # Make the GET request
     response = await client.get(endpoint)

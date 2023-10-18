@@ -31,18 +31,18 @@ async def read_playlist_track(playlisttrack_id: int) -> Optional[PlaylistTrack]:
 
 
 @router.put("/playlisttracks/{playlisttrack_id}", tags=["playlisttracks"])
-async def update_playlist_track(playlisttrack_id: int, playlisttrack: PlaylistTrackPostAndPut) -> Optional[PlaylistTrack]:
-    logger.debug(f'Updating playlisttrack_id: {playlisttrack_id} with {playlisttrack}')
+async def update_playlist_track(pltrack_id: int, pltrack: PlaylistTrackPostAndPut) -> Optional[PlaylistTrack]:
+    logger.debug(f'Updating playlisttrack_id: {pltrack_id} with {pltrack}')
     try:
-        playlisttrack = await prisma.playlisttrack.update(
-            data={"playlist_id": playlisttrack.playlist_id,
-                  "track_id": playlisttrack.track_id},
-            where={"id": playlisttrack_id})
+        pltrack = await prisma.playlisttrack.update(
+            data={"playlist_id": pltrack.playlist_id,
+                  "track_id": pltrack.track_id},
+            where={"id": pltrack_id})
     except Exception as e:
-        logger.error(f'Exception while updating playlisttrack {playlisttrack_id} with {playlisttrack}: {e}', e)
+        logger.error(f'Exception while updating playlisttrack {pltrack_id} with {pltrack}: {e}', e)
         raise e
-    logger.debug(f'Updated playlisttrack {playlisttrack}')
-    return playlisttrack
+    logger.debug(f'Updated playlisttrack {pltrack}')
+    return pltrack
 
 
 @router.post("/playlisttracks/", tags=["playlisttracks"])

@@ -61,7 +61,7 @@ async def update_customer(customer_id: int, customer: CustomerPostAndPut) -> Opt
 
 
 @router.post("/customers/", tags=["customers"])
-async def create_customer(customer: CustomerPostAndPut)-> Customer:
+async def create_customer(customer: CustomerPostAndPut) -> Customer:
     logger.debug(f'Creating customer {customer}')
     try:
         customer = await prisma.customer.create(
