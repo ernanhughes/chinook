@@ -31,7 +31,8 @@ async def read_playlist_track(playlisttrack_id: int) -> Optional[PlaylistTrack]:
 
 
 @router.put("/playlisttracks/{playlisttrack_id}", tags=["playlisttracks"])
-async def update_playlist_track(pltrack_id: int, pltrack: PlaylistTrackPostAndPut) -> Optional[PlaylistTrack]:
+async def update_playlist_track(pltrack_id: int, pltrack: PlaylistTrackPostAndPut) \
+        -> Optional[PlaylistTrack]:
     logger.debug('Updating playlisttrack_id: %s with %s', pltrack_id, pltrack)
     try:
         pltrack = await prisma.playlisttrack.update(
@@ -39,7 +40,8 @@ async def update_playlist_track(pltrack_id: int, pltrack: PlaylistTrackPostAndPu
                   "track_id": pltrack.track_id},
             where={"id": pltrack_id})
     except Exception as e:
-        logger.error('Exception while updating playlisttrack %s with %s: %s', pltrack_id, pltrack, e)
+        logger.error('Exception while updating playlisttrack %s with %s: %s',
+                     pltrack_id, pltrack, e)
         raise e
     logger.debug('Updated playlisttrack %s', pltrack)
     return pltrack
@@ -49,8 +51,9 @@ async def update_playlist_track(pltrack_id: int, pltrack: PlaylistTrackPostAndPu
 async def create_playlisttrack(playlisttrack: PlaylistTrackPostAndPut) -> PlaylistTrack:
     logger.debug('Creating playlist track %s', playlisttrack)
     try:
-        playlist_track = await prisma.playlisttrack.create(data={"playlist_id": playlisttrack.playlist_id,
-                                                                 "track_id": playlisttrack.track_id})
+        playlist_track = await prisma.playlisttrack.create(
+            data={"playlist_id": playlisttrack.playlist_id,
+                  "track_id": playlisttrack.track_id})
     except Exception as e:
         logger.error('Exception while creating new playlist track %s', e)
         raise e

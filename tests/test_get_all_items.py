@@ -1,5 +1,6 @@
 import pytest
 from httpx import AsyncClient
+from .utils import get_url
 
 
 @pytest.mark.anyio
@@ -8,12 +9,5 @@ async def test_get_all_endpoints(client: AsyncClient) -> None:
                  'artists', 'customers', 'employees', 'invoices', 'invoiceitems',
                  'playlisttracks']
     for endpoint in endpoints:
-        url = f'/api/v1/{endpoint}/'
-        print(url)
-        # Make the GET request
-        response = await client.get(url)
-        if response.status_code == 200:
-            print("Success:", response.json())
-        else:
-            print(f'Failed: {url} {response.status_code}')
+        response = await get_url(client, f'/api/v1/{endpoint}/')
         assert response.status_code == 200

@@ -8,6 +8,7 @@ from fastapi import FastAPI
 from fastapi.middleware.gzip import GZipMiddleware
 
 from chinook.controller import apis
+from chinook.db.prisma import prisma
 
 log_file_path = path.join(path.dirname(path.abspath(__file__)), 'logging.conf')
 print(f'log_file_path: {log_file_path}')
@@ -17,6 +18,12 @@ logger = logging.getLogger(__name__)
 app = FastAPI()
 app.add_middleware(GZipMiddleware, minimum_size=1000)
 app.include_router(apis, prefix="/api/v1")
+
+
+@app.on_event("startup")
+async def startup():
+    await prisma.connect()
+    logger.info("Application started")
 
 
 @app.on_event("shutdown")

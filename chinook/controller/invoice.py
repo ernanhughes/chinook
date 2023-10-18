@@ -37,7 +37,7 @@ async def read_invoice(invoice_id: int) -> Optional[Invoice]:
 
 @router.put("/invoices/{invoice_id}", tags=["invoices"])
 async def update_invoice(invoice_id: int, invoice: InvoicePostAndPut) -> Optional[Invoice]:
-    logger.debug(f'Updating invoice_id: {invoice_id} with {invoice}')
+    logger.debug('Updating invoice_id: %s with %s', invoice_id, invoice)
     try:
         invoice = await prisma.invoice.update(
             data={"customer_id": invoice.customer_id,
@@ -65,8 +65,10 @@ async def create_invoice(invoice: InvoicePostAndPut) -> Invoice:
                                                     "billing_address": invoice.billing_address,
                                                     "billing_city": invoice.billing_city,
                                                     "billing_state": invoice.billing_state,
-                                                    "billing_country": invoice.billing_country,
-                                                    "billing_postal_code": invoice.billing_postal_code,
+                                                    "billing_country":
+                                                        invoice.billing_country,
+                                                    "billing_postal_code":
+                                                        invoice.billing_postal_code,
                                                     "total": invoice.total})
     except Exception as e:
         logger.error('Exception while creating new invoice %s', e)

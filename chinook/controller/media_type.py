@@ -36,16 +36,17 @@ async def read_mediatype(mediatype_id: int) -> Optional[MediaType]:
 
 
 @router.put("/mediatypes/{mediatype_id}", tags=["mediatypes"])
-async def update_mediatype(mediatype_id: int, mediatype: MediaTypePostAndPut) -> Optional[MediaType]:
-    logger.debug('Updating mediatype_id: %s with %s', mediatype_id, mediatype)
+async def update_mediatype(mt_id: int, mt: MediaTypePostAndPut) -> Optional[MediaType]:
+    logger.debug('Updating mediatype_id: %s with %s', mt_id, mt)
     try:
-        mediatype = await prisma.mediatype.update(data={"name": mediatype.name},
-                                                  where={"id": mediatype_id})
+        mt = await prisma.mediatype.update(data={"name": mt.name},
+                                           where={"id": mt_id})
     except Exception as e:
-        logger.error('Exception while updating mediatype %s with %s: %s', mediatype_id, mediatype, e)
+        logger.error('Exception while updating mediatype %s with %s: %s',
+                     mt_id, mt, e)
         raise e
-    logger.debug('Updated mediatype %s', mediatype)
-    return mediatype
+    logger.debug('Updated mediatype %s', mt)
+    return mt
 
 
 @router.post("/mediatypes/", tags=["mediatypes"])

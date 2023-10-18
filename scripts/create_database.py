@@ -6,7 +6,7 @@ load_dotenv()
 DATABASE_URL = os.getenv('DATABASE_URL')
 
 print(DATABASE_URL)
-os.system(f'prisma db push --schema .\\prisma\\chinook.prisma')
+os.system('prisma db push --schema .\\prisma\\chinook.prisma')
 
 
 def execute_file(file_name):

@@ -26,10 +26,7 @@ def anyio_backend():
 
 @pytest.fixture(scope="session")
 async def client():
-    async with AsyncClient(app=app, base_url="http://test") as client:
+    async with AsyncClient(app=app, base_url="http://test") as async_client:
         print("Client is ready")
-        try:
-            await prisma.connect()
-        except Exception:
-            pass
-        yield client
+        await prisma.connect()
+        yield async_client

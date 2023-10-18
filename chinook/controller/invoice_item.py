@@ -36,7 +36,8 @@ async def read_invoiceitem(invoiceitem_id: int) -> Optional[InvoiceItem]:
 
 
 @router.put("/invoiceitems/{invoiceitem_id}", tags=["invoiceitems"])
-async def update_invoiceitem(invoiceitem_id: int, invoiceitem: InvoiceItemPostAndPut) -> Optional[InvoiceItem]:
+async def update_invoiceitem(invoiceitem_id: int, invoiceitem: InvoiceItemPostAndPut) \
+        -> Optional[InvoiceItem]:
     logger.debug('Updating invoice item id: %s with %s', invoiceitem_id, invoiceitem)
     try:
         invoice_item = await prisma.invoiceitem.update(data={
@@ -46,7 +47,8 @@ async def update_invoiceitem(invoiceitem_id: int, invoiceitem: InvoiceItemPostAn
             "quantity": invoiceitem.quantity},
             where={"id": invoiceitem_id})
     except Exception as e:
-        logger.error('Exception while updating invoice item %s with %s: %s', invoiceitem_id, invoiceitem, e)
+        logger.error('Exception while updating invoice item %s with %s: %s',
+                     invoiceitem_id, invoiceitem, e)
         raise e
     logger.debug('Updated invoice item %s', invoice_item)
     return invoice_item
