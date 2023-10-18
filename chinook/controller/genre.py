@@ -13,54 +13,54 @@ router = APIRouter()
 
 @router.get("/genres/", tags=["genres"])
 async def read_genres() -> List[Genre]:
-    logging.debug("Getting genres")
+    logger.debug("Getting genres")
     try:
         genres = await prisma.genre.find_many()
     except Exception as e:
-        logger.error(f'Exception while getting genres: {e}', e)
+        logger.error('Exception while getting genres: %s', e)
         raise e
-    logging.info(f"Found {genres.__len__()} genres")
+    logger.info("Found %s genres", len(genres))
     return genres
 
 
 @router.get("/genres/{genre_id}", tags=["genres"])
 async def read_genre(genre_id: int) -> Optional[Genre]:
-    logging.debug(f'Getting genre_id: {genre_id}')
+    logging.debug('Getting genre_id: %s', genre_id)
     try:
         genre = await prisma.genre.find_unique(where={"id": genre_id})
     except Exception as e:
-        logger.error(f'Exception while getting genre {genre_id}: {e}', e)
+        logger.error('Exception while getting genre %s: %s', genre_id, e)
         raise e
-    logging.debug(f'Found genre: {genre}')
+    logging.debug('Found genre: %s', genre)
     return genre
 
 
 @router.put("/genres/{genre_id}", tags=["genres"])
 async def update_genre(genre_id: int, genre: GenrePostAndPut) -> Optional[Genre]:
-    logger.debug(f'Updating genre_id: {genre_id} with {genre}')
+    logger.debug('Updating genre_id: %s with %s', genre_id, genre)
     try:
         genre = await prisma.genre.update(data={"name": genre.name},
                                           where={"id": genre_id})
     except Exception as e:
-        logger.error(f'Exception while updating genre {genre_id} with {genre}: {e}', e)
+        logger.error('Exception while updating genre %s with %s: %s', genre_id, genre, e)
         raise e
-    logger.debug(f'Updated genre {genre}')
+    logger.debug('Updated genre %s', genre)
     return genre
 
 
 @router.post("/genres/", tags=["genres"])
 async def create_genre(genre: GenrePostAndPut) -> Genre:
-    logger.debug(f'Creating genre {genre}')
+    logger.debug('Creating genre %s', genre)
     try:
         genre = await prisma.genre.create(data={"name": genre.name})
     except Exception as e:
-        logger.error(f'Exception while creating new genre {e}', e)
+        logger.error('Exception while creating new genre %s: %s', e, genre)
         raise e
-    logger.debug(f'Created genre {genre}')
+    logger.debug('Created genre %s', genre)
     return genre
 
 
 @router.delete("/genres/{genre_id}", tags=["genres"])
 async def delete_genre(genre_id: int) -> Optional[Genre]:
-    logger.info(f'Deleting genre {genre_id}')
+    logger.info('Deleting genre %s', genre_id)
     return await prisma.genre.delete(where={"id": genre_id})

@@ -13,55 +13,55 @@ router = APIRouter()
 
 @router.get("/albums/", tags=["albums"])
 async def read_albums() -> List[Album]:
-    logging.debug("Getting albums")
+    logger.debug("Getting albums")
     try:
         albums = await prisma.album.find_many()
     except Exception as e:
-        logger.error(f'Exception while getting albums: {e}', e)
+        logger.error('Exception while getting albums: %s', e)
         raise e
-    logging.info(f"Found {albums.__len__()} albums")
+    logger.info("Found %s albums", len(albums))
     return albums
 
 
 @router.get("/albums/{album_id}", tags=["albums"])
 async def read_album(album_id: int) -> Optional[Album]:
-    logging.debug(f'Getting album_id: {album_id}')
+    logging.debug('Getting album_id: %s', album_id)
     try:
         album = await prisma.album.find_unique(where={"id": album_id})
     except Exception as e:
-        logger.error(f'Exception while getting album {album_id}: {e}', e)
+        logger.error('Exception while getting album %s: %s', album_id, e)
         raise e
-    logging.debug(f'Found Album: {album}')
+    logging.debug('Found Album: %s', album)
     return album
 
 
 @router.put("/albums/{album_id}", tags=["albums"])
 async def update_album(album_id: int, album: AlbumPostAndPut) -> Optional[Album]:
-    logger.debug(f'Updating album_id: {album_id} with {album}')
+    logger.debug('Updating album_id: %s with %s', album_id, album)
     try:
         album = await prisma.album.update(
             data={"title": album.title, "artist_id": album.artist_id},
             where={"id": album_id})
     except Exception as e:
-        logger.error(f'Exception while updating album {album_id} with {album}: {e}', e)
+        logger.error('Exception while updating album %s with %s: %s', album_id, album, e)
         raise e
-    logger.debug(f'Updated album {album}')
+    logger.debug('Updated album %s', album)
     return album
 
 
 @router.post("/albums/", tags=["albums"])
 async def create_album(album: AlbumPostAndPut) -> Album:
-    logger.debug(f'Creating album {album}')
+    logger.debug('Creating album %s', album)
     try:
         album = await prisma.album.create(data={"title": album.title, "artist_id": album.artist_id})
     except Exception as e:
-        logger.error(f'Exception while creating new album {e}', e)
+        logger.error('Exception while creating new album %s: %s', e, album)
         raise e
-    logger.debug(f'Created album {album}')
+    logger.debug('Created album %s', album)
     return album
 
 
 @router.delete("/albums/{album_id}", tags=["albums"])
 async def delete_album(album_id: int) -> Optional[Album]:
-    logger.info(f'Deleting album {album_id}')
+    logger.info('Deleting album %s', album_id)
     return await prisma.album.delete(where={"id": album_id})

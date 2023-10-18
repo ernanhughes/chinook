@@ -13,25 +13,25 @@ router = APIRouter()
 
 @router.get("/invoices/", tags=["invoices"])
 async def read_invoices() -> List[Invoice]:
-    logging.debug("Getting invoices")
+    logger.debug("Getting invoices")
     try:
         invoices = await prisma.invoice.find_many()
     except Exception as e:
-        logger.error(f'Exception while getting invoices: {e}', e)
+        logger.error('Exception while getting invoices: %s', e)
         raise e
-    logging.info(f"Found {invoices.__len__()} invoices")
+    logger.info("Found %s invoices", len(invoices))
     return invoices
 
 
 @router.get("/invoices/{invoice_id}", tags=["invoices"])
 async def read_invoice(invoice_id: int) -> Optional[Invoice]:
-    logging.debug(f'Getting invoice_id: {invoice_id}')
+    logging.debug('Getting invoice_id: %s', invoice_id)
     try:
         invoice = await prisma.invoice.find_unique(where={"id": invoice_id})
     except Exception as e:
-        logger.error(f'Exception while getting invoice {invoice_id}: {e}', e)
+        logger.error('Exception while getting invoice %s: %s', invoice_id, e)
         raise e
-    logging.debug(f'Found invoice: {invoice}')
+    logging.debug('Found invoice: %s', invoice)
     return invoice
 
 
@@ -50,15 +50,15 @@ async def update_invoice(invoice_id: int, invoice: InvoicePostAndPut) -> Optiona
                   "total": invoice.total},
             where={"id": invoice_id})
     except Exception as e:
-        logger.error(f'Exception while updating invoice {invoice_id} with {invoice}: {e}', e)
+        logger.error('Exception while updating invoice %s with %s: %s', invoice_id, invoice, e)
         raise e
-    logger.debug(f'Updated invoice {invoice}')
+    logger.debug('Updated invoice %s', invoice)
     return invoice
 
 
 @router.post("/invoices/", tags=["invoices"])
 async def create_invoice(invoice: InvoicePostAndPut) -> Invoice:
-    logger.debug(f'Creating invoice {invoice}')
+    logger.debug('Creating invoice %s', invoice)
     try:
         invoice = await prisma.invoice.create(data={"customer_id": invoice.customer_id,
                                                     "invoice_date": invoice.invoice_date,
@@ -69,13 +69,13 @@ async def create_invoice(invoice: InvoicePostAndPut) -> Invoice:
                                                     "billing_postal_code": invoice.billing_postal_code,
                                                     "total": invoice.total})
     except Exception as e:
-        logger.error(f'Exception while creating new invoice {e}', e)
+        logger.error('Exception while creating new invoice %s', e)
         raise e
-    logger.debug(f'Created invoice {invoice}')
+    logger.debug('Created invoice %s', invoice)
     return invoice
 
 
 @router.delete("/invoices/{invoice_id}", tags=["invoices"])
 async def delete_invoice(invoice_id: int) -> Optional[Invoice]:
-    logger.info(f'Deleting invoice {invoice_id}')
+    logger.info('Deleting invoice %s', invoice_id)
     return await prisma.invoice.delete(where={"id": invoice_id})

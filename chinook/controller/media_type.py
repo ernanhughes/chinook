@@ -13,54 +13,54 @@ router = APIRouter()
 
 @router.get("/mediatypes/", tags=["mediatypes"])
 async def read_mediatypes() -> List[MediaType]:
-    logging.debug("Getting media types")
+    logger.debug("Getting media types")
     try:
         mediatypes = await prisma.mediatype.find_many()
     except Exception as e:
-        logger.error(f'Exception while getting mediatypes: {e}', e)
+        logger.error("Exception while getting mediatypes: %s", e)
         raise e
-    logging.info(f"Found {mediatypes.__len__()} media types")
+    logger.info("Found %s media types", len(mediatypes))
     return mediatypes
 
 
 @router.get("/mediatypes/{mediatype_id}", tags=["mediatypes"])
 async def read_mediatype(mediatype_id: int) -> Optional[MediaType]:
-    logging.debug(f'Getting mediatype_id: {mediatype_id}')
+    logging.debug('Getting mediatype_id: %s', mediatype_id)
     try:
         mediatype = await prisma.mediatype.find_unique(where={"id": mediatype_id})
     except Exception as e:
-        logger.error(f'Exception while getting mediatype {mediatype_id}: {e}', e)
+        logger.error('Exception while getting mediatype %s: %s', mediatype_id, e)
         raise e
-    logging.debug(f'Found mediatype: {mediatype}')
+    logging.debug('Found mediatype: %s', mediatype)
     return mediatype
 
 
 @router.put("/mediatypes/{mediatype_id}", tags=["mediatypes"])
 async def update_mediatype(mediatype_id: int, mediatype: MediaTypePostAndPut) -> Optional[MediaType]:
-    logger.debug(f'Updating mediatype_id: {mediatype_id} with {mediatype}')
+    logger.debug('Updating mediatype_id: %s with %s', mediatype_id, mediatype)
     try:
         mediatype = await prisma.mediatype.update(data={"name": mediatype.name},
                                                   where={"id": mediatype_id})
     except Exception as e:
-        logger.error(f'Exception while updating mediatype {mediatype_id} with {mediatype}: {e}', e)
+        logger.error('Exception while updating mediatype %s with %s: %s', mediatype_id, mediatype, e)
         raise e
-    logger.debug(f'Updated mediatype {mediatype}')
+    logger.debug('Updated mediatype %s', mediatype)
     return mediatype
 
 
 @router.post("/mediatypes/", tags=["mediatypes"])
 async def create_mediatype(mediatype: MediaTypePostAndPut) -> MediaType:
-    logger.debug(f'Creating mediatype {mediatype}')
+    logger.debug('Creating mediatype %s', mediatype)
     try:
         mediatype = await prisma.mediatype.create(data={"name": mediatype.name})
     except Exception as e:
-        logger.error(f'Exception while creating new mediatype {e}', e)
+        logger.error('Exception while creating new mediatype %s', e)
         raise e
-    logger.debug(f'Created mediatype {mediatype}')
+    logger.debug('Created mediatype %s', mediatype)
     return mediatype
 
 
 @router.delete("/mediatypes/{mediatype_id}", tags=["mediatypes"])
 async def delete_mediatype(mediatype_id: int) -> Optional[MediaType]:
-    logger.info(f'Deleting mediatype {mediatype_id}')
+    logger.info('Deleting mediatype %s', mediatype_id)
     return await prisma.mediatype.delete(where={"id": mediatype_id})
