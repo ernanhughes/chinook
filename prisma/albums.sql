@@ -1,12 +1,3 @@
-TRUNCATE TABLE albums CASCADE;
-DO $$
-DECLARE
-    seq_name TEXT;
-BEGIN
-    SELECT pg_get_serial_sequence('albums', 'id') INTO seq_name;
-    EXECUTE 'ALTER SEQUENCE ' || seq_name || ' RESTART WITH 1';
-END
-$$;
 INSERT INTO albums (id,title,artist_id) VALUES (1,'For Those About To Rock We Salute You',1);
 INSERT INTO albums (id,title,artist_id) VALUES (2,'Balls to the Wall',2);
 INSERT INTO albums (id,title,artist_id) VALUES (3,'Restless and Wild',2);
@@ -26,7 +17,7 @@ INSERT INTO albums (id,title,artist_id) VALUES (16,'Black Sabbath',12);
 INSERT INTO albums (id,title,artist_id) VALUES (17,'Black Sabbath Vol. 4 (Remaster)',12);
 INSERT INTO albums (id,title,artist_id) VALUES (18,'Body Count',13);
 INSERT INTO albums (id,title,artist_id) VALUES (19,'Chemical Wedding',14);
-INSERT INTO albums (id,title,artist_id) VALUES (20,'The Best Of Buddy Guy - The Millenium Collection',15);
+INSERT INTO albums (id,title,artist_id) VALUES (20,'The Best Of Buddy Guy - The Millennium Collection',15);
 INSERT INTO albums (id,title,artist_id) VALUES (21,'Prenda Minha',16);
 INSERT INTO albums (id,title,artist_id) VALUES (22,'Sozinho Remix Ao Vivo',16);
 INSERT INTO albums (id,title,artist_id) VALUES (23,'Minha Historia',17);
@@ -354,5 +345,3 @@ INSERT INTO albums (id,title,artist_id) VALUES (344,'Schubert: The Late String Q
 INSERT INTO albums (id,title,artist_id) VALUES (345,'Monteverdi: L''Orfeo',273);
 INSERT INTO albums (id,title,artist_id) VALUES (346,'Mozart: Chamber Music',274);
 INSERT INTO albums (id,title,artist_id) VALUES (347,'Koyaanisqatsi (Soundtrack from the Motion Picture)',275);
---- update sequence on table albums
-SELECT setval(pg_get_serial_sequence('albums', 'id'), coalesce(max(id)+1, 1), false) FROM albums;

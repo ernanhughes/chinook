@@ -1,12 +1,3 @@
-TRUNCATE TABLE employees CASCADE;
-DO $$
-DECLARE
-    seq_name TEXT;
-BEGIN
-    SELECT pg_get_serial_sequence('employees', 'id') INTO seq_name;
-    EXECUTE 'ALTER SEQUENCE ' || seq_name || ' RESTART WITH 1';
-END
-$$;
 INSERT INTO employees ("id", "last_name", "first_name", "title", "reports_to_id", "birth_date", "hire_date", "address", "city", "state", "country", "postal_code", "phone", "fax", "email") VALUES (1,'Adams','Andrew','General Manager',NULL,'1962-02-18 00:00:00','2002-08-14 00:00:00','11120 Jasper Ave NW','Edmonton','AB','Canada','T5K 2N1','+1 (780) 428-9482','+1 (780) 428-3457','andrew@chinookcorp.com');
 INSERT INTO employees ("id", "last_name", "first_name", "title", "reports_to_id", "birth_date", "hire_date", "address", "city", "state", "country", "postal_code", "phone", "fax", "email") VALUES (2,'Edwards','Nancy','Sales Manager',1,'1958-12-08 00:00:00','2002-05-01 00:00:00','825 8 Ave SW','Calgary','AB','Canada','T2P 2T3','+1 (403) 262-3443','+1 (403) 262-3322','nancy@chinookcorp.com');
 INSERT INTO employees ("id", "last_name", "first_name", "title", "reports_to_id", "birth_date", "hire_date", "address", "city", "state", "country", "postal_code", "phone", "fax", "email") VALUES (3,'Peacock','Jane','Sales Support Agent',2,'1973-08-29 00:00:00','2002-04-01 00:00:00','1111 6 Ave SW','Calgary','AB','Canada','T2P 5M5','+1 (403) 262-3443','+1 (403) 262-6712','jane@chinookcorp.com');
@@ -15,5 +6,3 @@ INSERT INTO employees ("id", "last_name", "first_name", "title", "reports_to_id"
 INSERT INTO employees ("id", "last_name", "first_name", "title", "reports_to_id", "birth_date", "hire_date", "address", "city", "state", "country", "postal_code", "phone", "fax", "email") VALUES (6,'Mitchell','Michael','IT Manager',1,'1973-07-01 00:00:00','2003-10-17 00:00:00','5827 Bowness Road NW','Calgary','AB','Canada','T3B 0C5','+1 (403) 246-9887','+1 (403) 246-9899','michael@chinookcorp.com');
 INSERT INTO employees ("id", "last_name", "first_name", "title", "reports_to_id", "birth_date", "hire_date", "address", "city", "state", "country", "postal_code", "phone", "fax", "email") VALUES (7,'King','Robert','IT Staff',6,'1970-05-29 00:00:00','2004-01-02 00:00:00','590 Columbia Boulevard West','Lethbridge','AB','Canada','T1K 5N8','+1 (403) 456-9986','+1 (403) 456-8485','robert@chinookcorp.com');
 INSERT INTO employees ("id", "last_name", "first_name", "title", "reports_to_id", "birth_date", "hire_date", "address", "city", "state", "country", "postal_code", "phone", "fax", "email") VALUES (8,'Callahan','Laura','IT Staff',6,'1968-01-09 00:00:00','2004-03-04 00:00:00','923 7 ST NW','Lethbridge','AB','Canada','T1H 1Y8','+1 (403) 467-3351','+1 (403) 467-8772','laura@chinookcorp.com');
---- update sequence on table employees
-SELECT setval(pg_get_serial_sequence('employees', 'id'), coalesce(max(id)+1, 1), false) FROM employees;

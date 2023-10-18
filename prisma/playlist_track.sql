@@ -1,12 +1,5 @@
-TRUNCATE TABLE playlist_track CASCADE;
-DO $$
-DECLARE
-    seq_name TEXT;
-BEGIN
-    SELECT pg_get_serial_sequence('playlist_track', 'id') INTO seq_name;
-    EXECUTE 'ALTER SEQUENCE ' || seq_name || ' RESTART WITH 1';
-END
-$$;
+DELETE FROM playlist_track;
+
 INSERT INTO playlist_track (playlist_id, track_id) VALUES (1,3402);
 INSERT INTO playlist_track (playlist_id, track_id) VALUES (1,3389);
 INSERT INTO playlist_track (playlist_id, track_id) VALUES (1,3390);
@@ -8722,5 +8715,3 @@ INSERT INTO playlist_track (playlist_id, track_id) VALUES (17,2095);
 INSERT INTO playlist_track (playlist_id, track_id) VALUES (17,2096);
 INSERT INTO playlist_track (playlist_id, track_id) VALUES (17,3290);
 INSERT INTO playlist_track (playlist_id, track_id) VALUES (18,597);
---- update sequence on table playlist_track
-SELECT setval(pg_get_serial_sequence('playlist_track', 'id'), coalesce(max(id)+1, 1), false) FROM playlist_track;

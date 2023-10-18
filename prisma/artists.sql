@@ -1,12 +1,3 @@
-TRUNCATE TABLE artists CASCADE;
-DO $$
-DECLARE
-    seq_name TEXT;
-BEGIN
-    SELECT pg_get_serial_sequence('artists', 'id') INTO seq_name;
-    EXECUTE 'ALTER SEQUENCE ' || seq_name || ' RESTART WITH 1';
-END
-$$;
 INSERT INTO artists (id, name) VALUES (1,'AC/DC');
 INSERT INTO artists (id, name) VALUES (2,'Accept');
 INSERT INTO artists (id, name) VALUES (3,'Aerosmith');
@@ -282,5 +273,3 @@ INSERT INTO artists (id, name) VALUES (272,'Emerson String Quartet');
 INSERT INTO artists (id, name) VALUES (273,'C. Monteverdi, Nigel Rogers - Chiaroscuro; London Baroque; London Cornett & Sackbu');
 INSERT INTO artists (id, name) VALUES (274,'Nash Ensemble');
 INSERT INTO artists (id, name) VALUES (275,'Philip Glass Ensemble');
---- update sequence on table artists
-SELECT setval(pg_get_serial_sequence('artists', 'id'), coalesce(max(id)+1, 1), false) FROM artists;

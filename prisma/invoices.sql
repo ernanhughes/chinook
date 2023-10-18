@@ -1,12 +1,3 @@
-TRUNCATE TABLE invoices CASCADE;
-DO $$
-DECLARE
-    seq_name TEXT;
-BEGIN
-    SELECT pg_get_serial_sequence('invoices', 'id') INTO seq_name;
-    EXECUTE 'ALTER SEQUENCE ' || seq_name || ' RESTART WITH 1';
-END
-$$;
 INSERT INTO invoices (id, customer_id, invoice_date, billing_address, billing_city, billing_state, billing_country, billing_postal_code, total) VALUES (1,2,'2009-01-01 00:00:00','Theodor-Heuss-Straße 34','Stuttgart',NULL,'Germany','70174',1.98);
 INSERT INTO invoices (id, customer_id, invoice_date, billing_address, billing_city, billing_state, billing_country, billing_postal_code, total) VALUES (2,4,'2009-01-02 00:00:00','Ullevålsveien 14','Oslo',NULL,'Norway','0171',3.96);
 INSERT INTO invoices (id, customer_id, invoice_date, billing_address, billing_city, billing_state, billing_country, billing_postal_code, total) VALUES (3,8,'2009-01-03 00:00:00','Grétrystraat 63','Brussels',NULL,'Belgium','1000',5.94);
@@ -419,5 +410,3 @@ INSERT INTO invoices (id, customer_id, invoice_date, billing_address, billing_ci
 INSERT INTO invoices (id, customer_id, invoice_date, billing_address, billing_city, billing_state, billing_country, billing_postal_code, total) VALUES (410,35,'2013-12-09 00:00:00','Rua dos Campeões Europeus de Viena, 4350','Porto',NULL,'Portugal',NULL,8.91);
 INSERT INTO invoices (id, customer_id, invoice_date, billing_address, billing_city, billing_state, billing_country, billing_postal_code, total) VALUES (411,44,'2013-12-14 00:00:00','Porthaninkatu 9','Helsinki',NULL,'Finland','00530',13.86);
 INSERT INTO invoices (id, customer_id, invoice_date, billing_address, billing_city, billing_state, billing_country, billing_postal_code, total) VALUES (412,58,'2013-12-22 00:00:00','12,Community Centre','Delhi',NULL,'India','110017',1.99);
---- update sequence on table invoices
-SELECT setval(pg_get_serial_sequence('invoices', 'id'), coalesce(max(id)+1, 1), false) FROM invoices;

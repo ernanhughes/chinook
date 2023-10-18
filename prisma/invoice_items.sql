@@ -1,12 +1,3 @@
-TRUNCATE TABLE invoice_items CASCADE;
-DO $$
-DECLARE
-    seq_name TEXT;
-BEGIN
-    SELECT pg_get_serial_sequence('invoice_items', 'id') INTO seq_name;
-    EXECUTE 'ALTER SEQUENCE ' || seq_name || ' RESTART WITH 1';
-END
-$$;
 INSERT INTO invoice_items (id, invoice_id, track_id, unit_price, quantity) VALUES (1,1,2,0.99,1);
 INSERT INTO invoice_items (id, invoice_id, track_id, unit_price, quantity) VALUES (2,1,4,0.99,1);
 INSERT INTO invoice_items (id, invoice_id, track_id, unit_price, quantity) VALUES (3,2,6,0.99,1);
@@ -2247,5 +2238,3 @@ INSERT INTO invoice_items (id, invoice_id, track_id, unit_price, quantity) VALUE
 INSERT INTO invoice_items (id, invoice_id, track_id, unit_price, quantity) VALUES (2238,411,3154,0.99,1);
 INSERT INTO invoice_items (id, invoice_id, track_id, unit_price, quantity) VALUES (2239,411,3163,0.99,1);
 INSERT INTO invoice_items (id, invoice_id, track_id, unit_price, quantity) VALUES (2240,412,3177,1.99,1);
---- update sequence on table invoice_items
-SELECT setval(pg_get_serial_sequence('invoice_items', 'id'), coalesce(max(id)+1, 1), false) FROM invoice_items;
