@@ -1,4 +1,4 @@
-import logging
+import logging.config
 import os
 from os import path
 
@@ -6,9 +6,8 @@ import uvicorn
 from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.middleware.gzip import GZipMiddleware
-
-from chinook.controller import apis
-from chinook.db.prisma import prisma
+from controller import apis
+from db.prisma import prisma
 
 log_file_path = path.join(path.dirname(path.abspath(__file__)), 'logging.conf')
 print(f'log_file_path: {log_file_path}')
